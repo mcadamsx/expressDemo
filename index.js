@@ -1,8 +1,7 @@
 const express = require("express");
-const Joi = require("joi");
 const app = express();
+const Joi = require("joi");
 
-app.use(express());
 
 courses = [
   { id: 1, name: "Java" },
@@ -14,16 +13,16 @@ app.get("/api/courses", (req, res) => {
   res.send(courses);
 });
 
-app.post("/api/courses", (req, res) => {
-  const { error } = inputValidate(req.body);
-  if (error) return res.status(404).send(error.details[0].message);
+app.post('/api/courses', (req, res) => {
+  const { error } = validateGenre(req.body); 
+  if (error) return res.status(400).send(error.details[0].message);
 
-  const course = {
-    id: courses.length + 1,
-    name: req.body.name,
+  const genre = {
+    id: genres.length + 1,
+    name: req.body.name
   };
-  courses.push(course);
-  res.send(course);
+  courses.push(genre);
+  res.send(genre);
 });
 
 app.put("app/courses/:id", (req,res)=>{
@@ -31,17 +30,18 @@ app.put("app/courses/:id", (req,res)=>{
     if(!course) return res.status(404).send("course id dont found")
 
     
-  const { error } = inputValidate(req.body);
+  const { error } = validateGenre(req.body);
   if (error) return res.status(404).send(error.details[0].message);
 
   courses.name = req.body.name;
   res.send(name)
 })
 
-function inputValidate(course) {
+function validateGenre(course) {
   const schema = {
-    name: Joi.string().min(3).required(),
+    name: Joi.string().min(3).required()
   };
+
   return Joi.validate(course, schema);
 }
 
