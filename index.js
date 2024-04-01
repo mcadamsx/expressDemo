@@ -1,49 +1,38 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const users = require("./model/users.model");
 const app = express();
-const Joi = require("joi");
+
+app.use(express.json());
+
+const PORT = process.env.PORT || 4000;
 
 
-courses = [
-  { id: 1, name: "Java" },
-  { id: 1, name: "C++" },
-  { id: 1, name: "Python" },
-];
-
-app.get("/api/courses", (req, res) => {
-  res.send(courses);
-});
-
-app.post('/api/courses', (req, res) => {
-  const { error } = validateGenre(req.body); 
-  if (error) return res.status(400).send(error.details[0].message);
-
-  const genre = {
-    id: genres.length + 1,
-    name: req.body.name
-  };
-  courses.push(genre);
-  res.send(genre);
-});
-
-app.put("app/courses/:id", (req,res)=>{
-    const course = courses.find(c => c.id === parseInt(req.params.id))
-    if(!course) return res.status(404).send("course id dont found")
-
-    
-  const { error } = validateGenre(req.body);
-  if (error) return res.status(404).send(error.details[0].message);
-
-  courses.name = req.body.name;
-  res.send(name)
+app.get('/api/users', async (req,res)=>{
+    try {
+        const Users = await users.find({})
+        res.status(200).json(Users)
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
 })
 
-function validateGenre(course) {
-  const schema = {
-    name: Joi.string().min(3).required()
-  };
+app.post("/api/users", async (req, res) => {
+  try {
+    const Users = await users.insert(req.body);
+    res.status(200).json(Users);
+  } catch (error) {
+    res.status(404).json({ message: message.error });
+  }
+});
 
-  return Joi.validate(course, schema);
-}
+mongoose
+  .connect("mongodb://localhost:27017/EWA-Backend")
+  .then(() => {
+    console.log("connected to database");
+    app.listen(PORT, () => console.log(`Listening to port ${PORT}`));
+  })
+  .catch(() => {
+    console.error("can not connect ot database");
+  });
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`Listenin to port ${port}`));
