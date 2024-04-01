@@ -7,7 +7,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 4000;
 
-
 app.get('/api/users', async (req,res)=>{
     try {
         const Users = await users.find({})
