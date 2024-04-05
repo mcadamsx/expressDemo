@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const logger = require('../middleware/logger')
 const userModel = require("../models/users.model");
 
 app.use(logger)
