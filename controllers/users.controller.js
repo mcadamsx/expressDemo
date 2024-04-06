@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const userModel = require("../models/users.model");
 
-app.use(logger)
 
 const usersControllers = {
   getAllUsers: async(request, response) => {
@@ -54,18 +53,6 @@ const usersControllers = {
     }
   },
 
-  loginUser: async(request, responses)=>{
-try {
-  const userdata = request.body
-
-  await userModel.findOne({email:userdata.email}),
-  
-} catch (error) {
-  responses.status.(404).json({message: error.message})
-  
-}
-
-  }
 
 };
 
